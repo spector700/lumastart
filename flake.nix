@@ -35,8 +35,15 @@
               ninja
 
               # Add some libraries
-              boost
-              fmt
+              gtkmm4
+              gtk4
+              glibmm_2_68
+              cairomm_1_16
+              pangomm_2_48
+
+              # for gtk-layer-shell
+              gobject-introspection
+              wayland-protocols
             ];
 
             shellHook = ''
