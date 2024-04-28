@@ -18,10 +18,6 @@ gtk_layer_shell = dependency('gtk-layer-shell-0',
                              fallback : ['gtk4-layer-shell', 'gtk_layer_shell'],
                              default_options : ['vapi=false'])
 
-# if gtk_layer_shell.found()
-#     add_project_arguments('-DHAVE_GTK_LAYER_SHELL', language: 'cpp')
-# endif
-
 executable('lumastart', src,
           dependencies : [
             deps,
