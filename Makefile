@@ -17,7 +17,8 @@ run: build
 	./build/lumastart
 
 debug-run: build-debug
-	./build/lumastart --log-level debug
+	# ./build/lumastart --log-level debug
+	./build/lumastart
 
 test:
 	meson test -C build --no-rebuild --verbose --suite lumastart

@@ -1,13 +1,13 @@
-#include "gtkmm/application.h"
-#include "src/log.h"
-#include "window.h"
+#include "app.h"
+#include "log.h"
 
 int main(int argc, char *argv[]) {
-  auto app = Gtk::Application::create("org.gtkmm.lumastart");
+  auto app = App::create();
+  app->getCss("src/ui.css");
 
   Log log;
   log.SetLevel(Log::LevelDebug);
   log.Info("Lumastart is now starting...");
 
-  return app->make_window_and_run<Window>(argc, argv);
+  return app->run(argc, argv);
 }

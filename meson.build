@@ -1,6 +1,6 @@
 project('lumastart', 'cpp',
   version : '0.1',
-  default_options : ['warning_level=3', 'cpp_std=c++23'])
+  default_options : ['buildtype=release', 'warning_level=3', 'cpp_std=c++23'])
 
 globber = run_command('sh', '-c', 'find . -name "*.cpp" | sort', check: true)
 src = globber.stdout().strip().split('\n')
