@@ -1,7 +1,9 @@
 #pragma once
 
 #include <iostream>
+#include <string>
 
+// singleton log class
 class Log {
 
 public:
@@ -9,29 +11,44 @@ public:
     LevelError = 0,
     LevelWaring = 1,
     LevelInfo = 2,
+    LevelDebug = 3,
   };
 
 private:
   Level m_LogLevel{LevelInfo};
+  Log() {}
 
 public:
-  void SetLevel(Level level) { m_LogLevel = level; }
+  // Static method to get the instance of the Log class
+  static Log &get() {
+    static Log instance;
+    return instance;
+  }
 
-  void Info(const char *message) {
+  void setLevel(Level level) { m_LogLevel = level; }
+  int getLevel() { return m_LogLevel; }
+
+  void debug(const std::string &message) {
+    if (m_LogLevel == LevelDebug) {
+      std::cout << "[DEBUG]: " << message << '\n';
+    }
+  }
+
+  void info(const char *message) {
     if (m_LogLevel >= LevelInfo) {
-      std::cout << "[Info]: " << message << '\n';
+      std::cout << "[INFO]: " << message << '\n';
     }
   }
 
-  void Warn(const char *message) {
+  void warn(const char *message) {
     if (m_LogLevel >= LevelWaring) {
-      std::cout << "[Warning]: " << message << '\n';
+      std::cerr << "[WARNING]: " << message << '\n';
     }
   }
 
-  void Error(const char *message) {
+  void error(const char *message) {
     if (m_LogLevel >= LevelError) {
-      std::cout << "[ERROR]: " << message << '\n';
+      std::cerr << "[ERROR]: " << message << '\n';
     }
   }
 };
