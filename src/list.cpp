@@ -74,16 +74,19 @@ void LumaStart::on_setup_listitem(
   icon->set_halign(Gtk::Align::CENTER);
   icon->set_icon_size(Gtk::IconSize::LARGE);
   icon->set_vexpand();
+  icon->set_margin(10);
   grid->attach(*icon, 0, 0, 1, 2);
 
   name->set_valign(Gtk::Align::CENTER);
   name->set_halign(Gtk::Align::START);
   name->set_expand();
+  name->set_margin_start(5);
   grid->attach(*name, 1, 0);
 
   description->set_valign(Gtk::Align::CENTER);
   description->set_halign(Gtk::Align::START);
   description->set_expand();
+  description->set_margin_start(5);
   grid->attach(*description, 1, 1);
 
   grid->set_size_request(0, 60);

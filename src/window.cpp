@@ -42,6 +42,8 @@ LumaStart::LumaStart() {
   set_child(m_Grid);
 
   m_Entry.set_hexpand();
+  // always allow text entry when search bar is not focused
+  m_Entry.set_key_capture_widget(*this);
   // use the window key controller to be able to exit on "esc"
   m_Entry.set_placeholder_text("Search");
   m_Entry.signal_changed().connect(
