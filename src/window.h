@@ -16,9 +16,9 @@
 #include "gtkmm/window.h"
 #include <string>
 
-class Window : public Gtk::Window {
+class LumaStart : public Gtk::Window {
 public:
-  Window();
+  LumaStart();
 
 protected:
   class List;

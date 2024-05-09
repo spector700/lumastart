@@ -26,8 +26,8 @@ void App::getCss(const std::string &file) {
   std::cout << "Loaded Css: " << file << '\n';
 }
 
-Window *App::create_window() {
-  auto window = new Window();
+LumaStart *App::create_window() {
+  auto window = new LumaStart();
 
   add_window(*window);
 

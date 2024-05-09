@@ -21,7 +21,7 @@ protected:
                    const Glib::Error &error);
 
 private:
-  Window *create_window();
+  LumaStart *create_window();
   void on_hide_window(Gtk::Window *window);
 
   Glib::RefPtr<Gtk::CssProvider> m_refCssProvider;
