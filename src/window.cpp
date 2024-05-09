@@ -61,7 +61,6 @@ LumaStart::LumaStart() {
                               Gtk::PolicyType::AUTOMATIC);
 
   m_Revealer.set_child(m_ScrolledWindow);
-
   m_Grid.attach(m_Revealer, 0, 1);
 
   key_controller->signal_key_pressed().connect(

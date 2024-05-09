@@ -1,8 +1,10 @@
 #include "applauncher.h"
-#include "gtkmm/box.h"
+#include "gtkmm/enums.h"
 #include "gtkmm/filterlistmodel.h"
+#include "gtkmm/grid.h"
 #include "gtkmm/image.h"
 #include "gtkmm/label.h"
+#include "gtkmm/object.h"
 #include "gtkmm/singleselection.h"
 #include "gtkmm/stringfilter.h"
 #include "window.h"
@@ -63,14 +65,29 @@ void LumaStart::fillDataModel() {
 void LumaStart::on_setup_listitem(
     const Glib::RefPtr<Gtk::ListItem> &list_item) {
   // Each ListItem contains a vertical Box with an Image and a Label.
-  auto vBox = Gtk::make_managed<Gtk::Box>(Gtk::Orientation::VERTICAL);
+  auto grid = Gtk::make_managed<Gtk::Grid>();
   auto icon = Gtk::make_managed<Gtk::Image>();
-  icon->set_halign(Gtk::Align::START);
+  auto name = Gtk::make_managed<Gtk::Label>();
+  auto description = Gtk::make_managed<Gtk::Label>();
+
   icon->set_valign(Gtk::Align::CENTER);
+  icon->set_halign(Gtk::Align::CENTER);
   icon->set_icon_size(Gtk::IconSize::LARGE);
-  vBox->append(*icon);
-  vBox->append(*Gtk::make_managed<Gtk::Label>());
-  list_item->set_child(*vBox);
+  icon->set_vexpand();
+  grid->attach(*icon, 0, 0, 1, 2);
+
+  name->set_valign(Gtk::Align::CENTER);
+  name->set_halign(Gtk::Align::START);
+  name->set_expand();
+  grid->attach(*name, 1, 0);
+
+  description->set_valign(Gtk::Align::CENTER);
+  description->set_halign(Gtk::Align::START);
+  description->set_expand();
+  grid->attach(*description, 1, 1);
+
+  grid->set_size_request(0, 60);
+  list_item->set_child(*grid);
 }
 
 void LumaStart::on_bind_listitem(const Glib::RefPtr<Gtk::ListItem> &list_item) {
@@ -79,13 +96,13 @@ void LumaStart::on_bind_listitem(const Glib::RefPtr<Gtk::ListItem> &list_item) {
   if (!row)
     return;
 
-  auto vBox = dynamic_cast<Gtk::Box *>(list_item->get_child());
-  if (!vBox) {
-    std::cerr << "No vBox\n";
+  auto grid = dynamic_cast<Gtk::Grid *>(list_item->get_child());
+  if (!grid) {
+    std::cerr << "No grid\n";
     return;
   }
 
-  auto icon = dynamic_cast<Gtk::Image *>(vBox->get_first_child());
+  auto icon = dynamic_cast<Gtk::Image *>(grid->get_child_at(0, 0));
   if (!icon) {
     std::cerr << "No icon\n";
     return;
@@ -93,13 +110,21 @@ void LumaStart::on_bind_listitem(const Glib::RefPtr<Gtk::ListItem> &list_item) {
 
   icon->set_from_icon_name(row->m_Icon);
 
-  auto label = dynamic_cast<Gtk::Label *>(vBox->get_last_child());
-  if (!label) {
-    std::cerr << "No label\n";
+  auto name = dynamic_cast<Gtk::Label *>(grid->get_child_at(1, 0));
+  if (!name) {
+    std::cerr << "No name label\n";
     return;
   }
 
-  label->set_text(row->m_Name);
+  name->set_text(row->m_Name);
+
+  auto description = dynamic_cast<Gtk::Label *>(grid->get_child_at(1, 1));
+  if (!description) {
+    std::cerr << "No description label\n";
+    return;
+  }
+
+  description->set_text(row->m_Description);
 }
 
 void LumaStart::on_selection_changed() {
@@ -114,16 +139,6 @@ void LumaStart::on_selection_changed() {
 
   std::cout << "Selection Changed to: name=" << name
             << ", description=" << description << std::endl;
-  /* auto item = m_Selection_model->get_selected_item(); */
-  /* auto row = std::dynamic_pointer_cast<Gtk::TreeListRow>(item); */
-  /* if (!row) */
-  /*   return; */
-  /* auto col = std::dynamic_pointer_cast<List>(row->get_item()); */
-  /* if (!col) */
-  /*   return; */
-  /* set_title(col->m_Name); */
-  /* if (!col->m_filename.empty()) */
-  /*   load_file(col->m_filename); */
 }
 
 int LumaStart::on_model_sort(const Glib::RefPtr<const List> &a,
