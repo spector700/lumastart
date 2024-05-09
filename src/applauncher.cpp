@@ -110,12 +110,23 @@ AppLauncher::parseDesktopEntries(
     }
 
     std::string line;
+    bool header_found{false};
+
+    std::string name;
+    std::string description;
+    std::string icon;
+    std::string exec;
     // read the file by each line
     while (std::getline(file, line)) {
       // check if its the header of the file
-      if (line.empty() || line[0] == '#' ||
-          (line[0] == '[' && line.ends_with(']')))
+      if (line == "[Desktop Entry]" && !header_found) {
+        header_found = true;
         continue;
+        // exit the file if the main entry has already been paresd to avoid
+        // getting the app actions
+      } else if ((line[0] == '[' && line.ends_with(']')) && header_found) {
+        break;
+      }
 
       else {
 
@@ -126,17 +137,22 @@ AppLauncher::parseDesktopEntries(
           std::string value = line.substr(pos + 1);
 
           if (key == "Name") {
-            entry.name = value;
-          }
-
-          else if (key == "Comment" || key == "Icon" || key == "Exec") {
-
-            // store the key value pair in the map
-            properties[entry.name][key] = value;
+            name = value;
+          } else if (key == "Comment") {
+            description = value;
+          } else if (key == "Icon") {
+            icon = value;
+          } else if (key == "Exec") {
+            exec = value;
           }
         }
       }
     }
+    // Add the collected values to the properties map for the current entry
+    properties[name]["Name"] = name;
+    properties[name]["Comment"] = description;
+    properties[name]["Icon"] = icon;
+    properties[name]["Exec"] = exec;
   }
   return properties;
 }
