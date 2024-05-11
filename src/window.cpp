@@ -87,6 +87,7 @@ void LumaStart::on_text_changed() {
 
     m_StringFilter->set_search(text);
     m_Selection_model->set_model(m_FilterListModel);
+    m_Selection_model->set_selected(0);
 
     if (!m_Revealer.get_reveal_child()) {
       m_Revealer.set_reveal_child();

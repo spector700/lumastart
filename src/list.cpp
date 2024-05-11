@@ -1,4 +1,5 @@
 #include "applauncher.h"
+#include "giomm/appinfo.h"
 #include "gtkmm/enums.h"
 #include "gtkmm/filterlistmodel.h"
 #include "gtkmm/grid.h"
@@ -16,7 +17,6 @@
 void LumaStart::setupDataModel() {
   m_Data_model = Gio::ListStore<List>::create();
   m_Selection_model = Gtk::SingleSelection::create(m_Data_model);
-  m_Selection_model->set_autoselect(true);
 
   m_Factory = Gtk::SignalListItemFactory::create();
   m_Factory->signal_setup().connect(
@@ -142,31 +142,30 @@ void LumaStart::on_selection_changed() {
 
   if (!col)
     return;
-
-  const std::string name = col->m_Name;
-  const Glib::ustring description = col->m_Description;
-
-  std::cout << "Selection Changed to: name=" << name
-            << ", description=" << description << std::endl;
 }
 
 void LumaStart::on_item_activated(unsigned int position) {
-  /* auto item =
-   * std::dynamic_pointer_cast<Gio::ListModel>(m_ListView.get_model()) */
-  /*                 ->get_object(position); */
-  auto row = m_Data_model->get_item(position);
-  std::cout << "activated: " << row << '\n';
-  // run the execution
-  /* gint exit_status = g_spawn_command_line_async("anki", nullptr); */
-  /* close(); */
-  /**/
-  /* if (exit_status == 0) { */
-  /*   std::cout << "Command executed successfully." << '\n'; */
-  /* } else { */
-  /*   std::cerr << "Command execution failed with exit status: " << exit_status
-   */
-  /*             << '\n'; */
-  /* } */
+  auto item = std::dynamic_pointer_cast<Gio::ListModel>(m_ListView.get_model())
+                  ->get_object(position);
+
+  auto row = std::dynamic_pointer_cast<List>(item);
+  auto app_info = std::dynamic_pointer_cast<Gio::AppInfo>(item);
+
+  std::cout << "item: " << row->m_Exec << '\n';
+
+// run the execution
+#if 0
+
+  gint exit_status = g_spawn_command_line_async(row->m_Exec.c_str(), nullptr);
+  close();
+
+  if (exit_status == 0) {
+    std::cout << "Command executed successfully." << '\n';
+  } else {
+    std::cerr << "Command execution failed with exit status: " << exit_status
+              << '\n';
+  }
+#endif // 0
 }
 
 int LumaStart::on_model_sort(const Glib::RefPtr<const List> &a,
