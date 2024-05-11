@@ -16,12 +16,62 @@
 #include "gtkmm/window.h"
 #include <string>
 
+/**
+ * @class LumaStart
+ * @brief Represents the main window of the application, handling UI elements
+ * and data management.
+ *
+ * This class manages the application's main window, including UI components
+ * like a grid, revealers, scrolled windows, list views, and search entries. It
+ * also handles data models, selection models, and list item factories for
+ * managing the list view's content.
+ */
 class LumaStart : public Gtk::Window {
 public:
   LumaStart();
 
 protected:
+  // Nested List class for managing list items.
   class List;
+
+  // A Gio::ListStore stores filename, description and texture.
+  class List : public Glib::Object {
+  public:
+    /**
+     * @struct properties
+     * @brief Struct representing the properties of a list item.
+     */
+    struct properties {
+      std::string name;
+      Glib::ustring description;
+      std::string icon;
+      std::string exec;
+    };
+
+    std::string m_Name;
+    Glib::ustring m_Description;
+    std::string m_Icon;
+    std::string m_Exec;
+
+    /**
+     * @brief Static factory method for creating List instances.
+     *
+     * Constructs a new List object with the given properties.
+     */
+    static Glib::RefPtr<List> create(const std::string &name,
+                                     const Glib::ustring &description,
+                                     const std::string &icon,
+                                     const std::string &exec) {
+      properties properties = {name, description, icon, exec};
+      return Glib::make_refptr_for_instance<List>(new List(properties));
+    }
+
+  protected:
+    List(const properties &properties)
+        : m_Name(properties.name), m_Description(properties.description),
+          m_Icon(properties.icon), m_Exec(properties.exec) {}
+  }; // List
+
   // signal handlers
   void on_item_activated(unsigned int position);
   void on_selection_changed();
@@ -29,28 +79,7 @@ protected:
   void on_bind_listitem(const Glib::RefPtr<Gtk::ListItem> &list_item);
   int on_model_sort(const Glib::RefPtr<const List> &a,
                     const Glib::RefPtr<const List> &b);
-  void add_entry(const std::string &name, const Glib::ustring &description,
-                 const std::string &icon);
-
-  // A Gio::ListStore stores filename, description and texture.
-  class List : public Glib::Object {
-  public:
-    std::string m_Name;
-    Glib::ustring m_Description;
-    std::string m_Icon;
-
-    static Glib::RefPtr<List> create(const std::string &name,
-                                     const Glib::ustring &description,
-                                     const std::string &icon) {
-      return Glib::make_refptr_for_instance<List>(
-          new List(name, description, icon));
-    }
-
-  protected:
-    List(const std::string &name, const Glib::ustring &description,
-         const std::string &icon)
-        : m_Name(name), m_Description(description), m_Icon(icon) {}
-  }; // List
+  void add_entry(const List::properties &prop);
 
   Glib::RefPtr<Gio::ListStore<List>> m_Data_model;
   Glib::RefPtr<Gtk::SingleSelection> m_Selection_model;

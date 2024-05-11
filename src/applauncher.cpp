@@ -1,11 +1,11 @@
 #include "applauncher.h"
+#include "glibmm/ustring.h"
 #include <cstddef>
 #include <cstdlib>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <string>
-#include <unordered_map>
 #include <vector>
 
 std::string AppLauncher::getHomeEnv() {
@@ -94,15 +94,13 @@ std::vector<AppLauncher::DesktopEntry> AppLauncher::getDesktopEntries() {
   return {};
 }
 
-// reads all the desktop entry files and returns a map of the key value pairs
-std::unordered_map<std::string, std::unordered_map<std::string, std::string>>
-AppLauncher::parseDesktopEntries(
+// reads all the desktop entry files and returns a struct of the properties
+std::vector<AppLauncher::properties> AppLauncher::parseDesktopEntries(
     std::vector<AppLauncher::DesktopEntry> &entries) {
-
-  std::unordered_map<std::string, std::unordered_map<std::string, std::string>>
-      properties;
+  std::vector<properties> entriesVector;
 
   for (auto &entry : entries) {
+    properties entryProperties;
     // load the file from the path
     std::ifstream file(entry.path);
     if (!file.is_open()) {
@@ -112,10 +110,6 @@ AppLauncher::parseDesktopEntries(
     std::string line;
     bool header_found{false};
 
-    std::string name;
-    std::string description;
-    std::string icon;
-    std::string exec;
     // read the file by each line
     while (std::getline(file, line)) {
       // check if its the header of the file
@@ -129,7 +123,6 @@ AppLauncher::parseDesktopEntries(
       }
 
       else {
-
         // seperate the key value at the "="
         size_t pos = line.find('=');
         if (pos != std::string::npos) {
@@ -137,22 +130,18 @@ AppLauncher::parseDesktopEntries(
           std::string value = line.substr(pos + 1);
 
           if (key == "Name") {
-            name = value;
+            entryProperties.name = value;
           } else if (key == "Comment") {
-            description = value;
+            entryProperties.description = value;
           } else if (key == "Icon") {
-            icon = value;
+            entryProperties.icon = value;
           } else if (key == "Exec") {
-            exec = value;
+            entryProperties.exec = value;
           }
         }
       }
     }
-    // Add the collected values to the properties map for the current entry
-    properties[name]["Name"] = name;
-    properties[name]["Comment"] = description;
-    properties[name]["Icon"] = icon;
-    properties[name]["Exec"] = exec;
+    entriesVector.push_back(entryProperties);
   }
-  return properties;
+  return entriesVector;
 }

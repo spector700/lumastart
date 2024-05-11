@@ -7,8 +7,11 @@
 #include "gtkmm/object.h"
 #include "gtkmm/singleselection.h"
 #include "gtkmm/stringfilter.h"
+#include "sigc++/functors/mem_fun.h"
 #include "window.h"
 #include <iostream>
+#include <memory>
+#include <vector>
 
 void LumaStart::setupDataModel() {
   m_Data_model = Gio::ListStore<List>::create();
@@ -20,6 +23,9 @@ void LumaStart::setupDataModel() {
       sigc::mem_fun(*this, &LumaStart::on_setup_listitem));
   m_Factory->signal_bind().connect(
       sigc::mem_fun(*this, &LumaStart::on_bind_listitem));
+
+  m_ListView.signal_activate().connect(
+      sigc::mem_fun(*this, &LumaStart::on_item_activated));
 
   // Create the filter model.
   auto expression = Gtk::ClosureExpression<Glib::ustring>::create(
@@ -37,21 +43,21 @@ void LumaStart::setupDataModel() {
 
 void LumaStart::fillDataModel() {
   std::vector<AppLauncher::DesktopEntry> de = AppLauncher::getDesktopEntries();
-  auto properties = AppLauncher::parseDesktopEntries(de);
+  std::vector<AppLauncher::properties> properties =
+      AppLauncher::parseDesktopEntries(de);
 
   Glib::ustring description;
   std::string icon;
+  std::string exec;
 
   for (const auto &entry : properties) {
-    for (const auto &prop : entry.second) {
-      if (prop.first == "Icon") {
-        icon = prop.second;
+    List::properties entryProperties;
+    entryProperties.name = entry.name;
+    entryProperties.description = entry.description;
+    entryProperties.icon = entry.icon;
+    entryProperties.exec = entry.exec;
 
-      } else if (prop.first == "Comment") {
-        description = prop.second;
-      }
-    }
-    add_entry(entry.first, description, icon);
+    add_entry(entryProperties);
   }
 
   m_Data_model->sort(sigc::mem_fun(*this, &LumaStart::on_model_sort));
@@ -144,14 +150,32 @@ void LumaStart::on_selection_changed() {
             << ", description=" << description << std::endl;
 }
 
+void LumaStart::on_item_activated(unsigned int position) {
+  /* auto item =
+   * std::dynamic_pointer_cast<Gio::ListModel>(m_ListView.get_model()) */
+  /*                 ->get_object(position); */
+  auto row = m_Data_model->get_item(position);
+  std::cout << "activated: " << row << '\n';
+  // run the execution
+  /* gint exit_status = g_spawn_command_line_async("anki", nullptr); */
+  /* close(); */
+  /**/
+  /* if (exit_status == 0) { */
+  /*   std::cout << "Command executed successfully." << '\n'; */
+  /* } else { */
+  /*   std::cerr << "Command execution failed with exit status: " << exit_status
+   */
+  /*             << '\n'; */
+  /* } */
+}
+
 int LumaStart::on_model_sort(const Glib::RefPtr<const List> &a,
                              const Glib::RefPtr<const List> &b) {
   return (a->m_Name < b->m_Name) ? -1 : ((a->m_Name > b->m_Name) ? 1 : 0);
 }
 
-void LumaStart::add_entry(const std::string &name,
-                          const Glib::ustring &description,
-                          const std::string &icon) {
+void LumaStart::add_entry(const List::properties &prop) {
 
-  m_Data_model->append(List::create(name, description, icon));
+  m_Data_model->append(
+      List::create(prop.name, prop.description, prop.icon, prop.exec));
 }

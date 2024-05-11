@@ -1,7 +1,7 @@
 #pragma once
 
+#include "glibmm/ustring.h"
 #include <string>
-#include <unordered_map>
 #include <vector>
 
 class AppLauncher {
@@ -15,8 +15,14 @@ public:
     std::string name, icon, description, exec;
   };
 
-  static std::unordered_map<std::string,
-                            std::unordered_map<std::string, std::string>>
+  struct properties {
+    std::string name;
+    Glib::ustring description;
+    std::string icon;
+    std::string exec;
+  };
+
+  static std::vector<properties>
   parseDesktopEntries(std::vector<DesktopEntry> &entries);
 
   static std::vector<DesktopEntry> getDesktopEntries();
