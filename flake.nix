@@ -35,21 +35,29 @@
               ninja
 
               # Add some libraries
+              gtk4-layer-shell
               gtkmm4
-              gtk4
+              # gtk4
               glibmm_2_68
-              cairomm_1_16
-              pangomm_2_48
-
-              # for gtk-layer-shell
-              gobject-introspection
-              wayland-protocols
+              # glib
+              # cairomm_1_16
+              # pangomm_2_48
             ];
+
+            # Remove the warning
+            hardeningDisable = [ "fortify" ];
 
             shellHook = ''
               echo "welcome to C++" | ${pkgs.lolcat}/bin/lolcat
             '';
           };
+        }
+      );
+
+      packages = forAllSystems (
+        { pkgs }:
+        {
+          default = pkgs.callPackage ./nix { };
         }
       );
     };
