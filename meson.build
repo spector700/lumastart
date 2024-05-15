@@ -8,8 +8,8 @@ src = globber.stdout().strip().split('\n')
 deps = [
   dependency('gtk4-layer-shell-0'),
   dependency('gtkmm-4.0', version: '>= 4.6.0'),
-  dependency('glibmm-2.68'),
-  dependency('giomm-2.68')
+  # dependency('glibmm-2.68'),
+  # dependency('giomm-2.68'),
   # dependency('cairomm-1.16'),
   # dependency('pangomm-2.48')
 ]

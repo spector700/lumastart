@@ -1,7 +1,7 @@
 #include "app.h"
 #include <iostream>
 
-App::App() : Gtk::Application("org.gtkmm.lumastart") {}
+App::App() : Gtk::Application("com.spector.lumaStart") {}
 
 Glib::RefPtr<App> App::create() {
   return Glib::make_refptr_for_instance<App>(new App());

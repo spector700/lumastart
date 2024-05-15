@@ -1,8 +1,9 @@
 #include "applauncher.h"
-#include "giomm/appinfo.h"
+#include "glibmm/refptr.h"
 #include "gtkmm/enums.h"
 #include "gtkmm/filterlistmodel.h"
 #include "gtkmm/grid.h"
+#include "gtkmm/icontheme.h"
 #include "gtkmm/image.h"
 #include "gtkmm/label.h"
 #include "gtkmm/object.h"
@@ -39,16 +40,14 @@ void LumaStart::setupDataModel() {
   m_StringFilter->set_match_mode(Gtk::StringFilter::MatchMode::SUBSTRING);
   m_FilterListModel =
       Gtk::FilterListModel::create(m_Data_model, m_StringFilter);
+
+  m_IconTheme = Gtk::IconTheme::get_for_display(Gdk::Display::get_default());
 }
 
 void LumaStart::fillDataModel() {
   std::vector<AppLauncher::DesktopEntry> de = AppLauncher::getDesktopEntries();
   std::vector<AppLauncher::properties> properties =
       AppLauncher::parseDesktopEntries(de);
-
-  Glib::ustring description;
-  std::string icon;
-  std::string exec;
 
   for (const auto &entry : properties) {
     List::properties entryProperties;
@@ -116,8 +115,10 @@ void LumaStart::on_bind_listitem(const Glib::RefPtr<Gtk::ListItem> &list_item) {
     std::cerr << "No icon\n";
     return;
   }
-
-  icon->set_from_icon_name(row->m_Icon);
+  if (m_IconTheme->has_icon(row->m_Icon)) {
+    /* m_IconTheme->lookup_icon(row->m_Icon, 0); */
+    icon->set_from_icon_name(row->m_Icon);
+  }
 
   auto name = dynamic_cast<Gtk::Label *>(grid->get_child_at(1, 0));
   if (!name) {
@@ -149,12 +150,9 @@ void LumaStart::on_item_activated(unsigned int position) {
                   ->get_object(position);
 
   auto row = std::dynamic_pointer_cast<List>(item);
-  auto app_info = std::dynamic_pointer_cast<Gio::AppInfo>(item);
-
-  std::cout << "item: " << row->m_Exec << '\n';
 
 // run the execution
-#if 0
+#if 1
 
   gint exit_status = g_spawn_command_line_async(row->m_Exec.c_str(), nullptr);
   close();

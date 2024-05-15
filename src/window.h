@@ -5,6 +5,7 @@
 #include "glibmm/ustring.h"
 #include "gtkmm/filterlistmodel.h"
 #include "gtkmm/grid.h"
+#include "gtkmm/icontheme.h"
 #include "gtkmm/listitem.h"
 #include "gtkmm/listview.h"
 #include "gtkmm/revealer.h"
@@ -86,6 +87,7 @@ protected:
   Glib::RefPtr<Gtk::SignalListItemFactory> m_Factory;
   Glib::RefPtr<Gtk::FilterListModel> m_FilterListModel;
   Glib::RefPtr<Gtk::StringFilter> m_StringFilter;
+  Glib::RefPtr<Gtk::IconTheme> m_IconTheme;
 
   void setupDataModel();
   void fillDataModel();
