@@ -22,8 +22,7 @@ public:
     std::string exec;
   };
 
-  static std::vector<properties>
-  parseDesktopEntries(std::vector<DesktopEntry> &entries);
+  static std::vector<properties> parseDesktopEntries();
 
   static std::vector<DesktopEntry> getDesktopEntries();
   static std::string getHomeEnv();

@@ -45,9 +45,10 @@ void LumaStart::setupDataModel() {
 }
 
 void LumaStart::fillDataModel() {
-  std::vector<AppLauncher::DesktopEntry> de = AppLauncher::getDesktopEntries();
+  /* std::vector<AppLauncher::DesktopEntry> desktopEntries = */
+  /*     AppLauncher::getDesktopEntries(); */
   std::vector<AppLauncher::properties> properties =
-      AppLauncher::parseDesktopEntries(de);
+      AppLauncher::parseDesktopEntries();
 
   for (const auto &entry : properties) {
     List::properties entryProperties;

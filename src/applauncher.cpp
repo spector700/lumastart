@@ -1,10 +1,10 @@
 #include "applauncher.h"
+#include "giomm/desktopappinfo.h"
 #include "glibmm/ustring.h"
-#include <cstddef>
 #include <cstdlib>
 #include <filesystem>
-#include <fstream>
 #include <iostream>
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -95,10 +95,33 @@ std::vector<AppLauncher::DesktopEntry> AppLauncher::getDesktopEntries() {
 }
 
 // reads all the desktop entry files and returns a struct of the properties
-std::vector<AppLauncher::properties> AppLauncher::parseDesktopEntries(
-    std::vector<AppLauncher::DesktopEntry> &entries) {
+std::vector<AppLauncher::properties> AppLauncher::parseDesktopEntries() {
   std::vector<properties> entriesVector;
 
+  auto apps = Gio::DesktopAppInfo::get_all();
+
+  for (const auto &app : apps) {
+    properties entryProperties;
+    auto desktop = std::dynamic_pointer_cast<Gio::DesktopAppInfo>(app);
+
+    // if the entry should be shown in menus, like for app launchers
+    if (desktop->should_show()) {
+
+      entryProperties.name = desktop->get_name();
+      entryProperties.description = desktop->get_description();
+
+      Glib::RefPtr<Gio::Icon> icon = desktop->get_icon();
+      if (icon) {
+        entryProperties.icon = icon->to_string();
+      }
+      entryProperties.exec = desktop->get_executable();
+
+      entriesVector.push_back(entryProperties);
+    }
+  }
+  return entriesVector;
+#if 0
+  
   for (auto &entry : entries) {
     properties entryProperties;
     // load the file from the path
@@ -144,4 +167,5 @@ std::vector<AppLauncher::properties> AppLauncher::parseDesktopEntries(
     entriesVector.push_back(entryProperties);
   }
   return entriesVector;
+#endif // 0
 }
