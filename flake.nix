@@ -28,7 +28,7 @@
           default = pkgs.mkShell {
             # The Nix packages provided in the environment
             packages = with pkgs; [
-              # Choose the build tools that you need
+              # build tools
               cmake
               pkg-config
               meson
