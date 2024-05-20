@@ -1,13 +1,11 @@
 #include "app.h"
+#include "config/config.h"
 #include "log.h"
-#include "src/config/config.h"
 #include <cstdlib>
 
 int main(int argc, char *argv[]) {
 
-  if (Config::init()) {
-    Config::parseConfig(CONFIG_PATH);
-  } else {
+  if (!Config::configInit()) {
     exit(1);
   }
 

@@ -2,19 +2,16 @@
 
 #include <string>
 
-#define CONFIG_PATH "/lumastart/lumastart.conf"
-
-struct configfile {
-  std::string height;
-  std::string width;
+struct Settings {
+  int width{0};
+  int height{0};
 };
 
-class Config {
+extern Settings configSettings;
 
-public:
-  Config();
+namespace Config {
+bool configInit();
 
-  static bool init();
+void parseConfig(const std::string &filepath);
 
-  static void parseConfig(const std::string &filepath);
-};
+} // namespace Config
