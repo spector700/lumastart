@@ -45,8 +45,6 @@ void LumaStart::setupDataModel() {
 }
 
 void LumaStart::fillDataModel() {
-  /* std::vector<AppLauncher::DesktopEntry> desktopEntries = */
-  /*     AppLauncher::getDesktopEntries(); */
   std::vector<AppLauncher::properties> properties =
       AppLauncher::parseDesktopEntries();
 
@@ -152,9 +150,6 @@ void LumaStart::on_item_activated(unsigned int position) {
 
   auto row = std::dynamic_pointer_cast<List>(item);
 
-// run the execution
-#if 1
-
   gint exit_status = g_spawn_command_line_async(row->m_Exec.c_str(), nullptr);
   close();
 
@@ -164,7 +159,6 @@ void LumaStart::on_item_activated(unsigned int position) {
     std::cerr << "Command execution failed with exit status: " << exit_status
               << '\n';
   }
-#endif // 0
 }
 
 int LumaStart::on_model_sort(const Glib::RefPtr<const List> &a,

@@ -5,16 +5,14 @@ project('lumastart', 'cpp',
 globber = run_command('sh', '-c', 'find . -name "*.cpp" | sort', check: true)
 src = globber.stdout().strip().split('\n')
 
+configFiles = include_directories('res')
+
 deps = [
   dependency('gtk4-layer-shell-0'),
   dependency('gtkmm-4.0', version: '>= 4.6.0'),
-  # dependency('glibmm-2.68'),
-  # dependency('giomm-2.68'),
-  # dependency('cairomm-1.16'),
-  # dependency('pangomm-2.48')
 ]
 
-
 executable('lumastart', src,
+          include_directories : configFiles,
           dependencies : [ deps ],
            install : true)

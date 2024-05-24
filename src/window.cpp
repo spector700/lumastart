@@ -8,6 +8,7 @@
 #include "gtkmm/gestureclick.h"
 #include "log.h"
 #include "sigc++/functors/mem_fun.h"
+#include "src/config/config.h"
 #include <string>
 
 LumaStart::LumaStart() {
@@ -31,10 +32,13 @@ LumaStart::LumaStart() {
   auto key_controller = Gtk::EventControllerKey::create(); // keyboard
   auto click_controller = Gtk::GestureClick::create();     // mouse
 
+  m_Grid.set_size_request(200, 200);
   m_Grid.set_halign(Gtk::Align::CENTER);
   m_Grid.set_valign(Gtk::Align::CENTER);
+  m_Grid.set_expand();
+  m_Grid.set_size_request(configSettings.width);
   m_Grid.set_margin_bottom(400);
-  m_Grid.set_size_request(650, 30);
+  /* m_Grid.set_size_request(configSettings.width, 30); */
   m_Grid.add_css_class("grid");
   m_Grid.add_controller(key_controller);
 
@@ -55,7 +59,8 @@ LumaStart::LumaStart() {
   m_ListView.set_show_separators();
 
   m_ScrolledWindow.set_child(m_ListView);
-  m_ScrolledWindow.set_max_content_height(400);
+  m_ScrolledWindow.set_max_content_height(configSettings.height);
+  m_ScrolledWindow.set_max_content_width(configSettings.width);
   // have the scroll window match the size of the listview
   m_ScrolledWindow.set_propagate_natural_width(true);
   m_ScrolledWindow.set_propagate_natural_height(true);

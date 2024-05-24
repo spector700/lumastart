@@ -29,7 +29,7 @@ bool Config::configInit() {
   std::cout << "Creating default config..." << '\n';
 
   // Check if the source file exists
-  if (!std::filesystem::exists("src/config/lumastart.conf")) {
+  if (!std::filesystem::exists("res/lumastart.conf")) {
     std::cerr << "Source file does not exist.\n";
     return false;
   }
@@ -38,7 +38,7 @@ bool Config::configInit() {
   std::filesystem::create_directories(
       std::filesystem::path(configPath).parent_path());
 
-  if (std::filesystem::copy_file("src/config/lumastart.conf", configPath)) {
+  if (std::filesystem::copy_file("res/lumastart.conf", configPath)) {
     std::cout << "Copied default config file to " << configPath << '\n';
   } else {
     std::cerr << "Could not copy default file to " << configPath << '\n';
