@@ -86,6 +86,9 @@ void Config::parseConfig(const std::string &filepath) {
       if (key == "height") {
         configSettings.height = std::stoi(value);
       }
+      if (key == "bottom_margin") {
+        configSettings.bottom_margin = std::stoi(value);
+      }
     }
   }
   config.close();

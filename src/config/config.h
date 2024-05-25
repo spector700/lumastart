@@ -12,6 +12,7 @@
 struct Settings {
   int width{0};
   int height{0};
+  int bottom_margin{0};
 };
 
 extern Settings configSettings;

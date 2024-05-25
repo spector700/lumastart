@@ -35,7 +35,7 @@ LumaStart::LumaStart() {
   m_Grid.set_halign(Gtk::Align::CENTER);
   m_Grid.set_valign(Gtk::Align::CENTER);
   m_Grid.set_expand();
-  m_Grid.set_margin_bottom(400);
+  m_Grid.set_margin_bottom(configSettings.bottom_margin);
   m_Grid.add_css_class("main");
   m_Grid.add_controller(key_controller);
 
