@@ -1,7 +1,12 @@
+/* Default style.css */
+
+/* The full screen window */
 window {
   background: rgba(0, 0, 0, 0.3);
 }
-.grid {
+
+/* The main visable widget */
+.main {
   background: #272335;
   padding: 8px;
   border-radius: 10px;

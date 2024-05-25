@@ -1,71 +1,60 @@
 #include "config.h"
-#include "giomm/resource.h"
+#include "utils/resource.h"
 #include <cstdlib>
 #include <filesystem>
 #include <fstream>
-#include <ios>
 #include <iostream>
 #include <string>
-
-#define CONFIG_PATH "/lumastart/lumastart.conf"
 
 Settings configSettings;
 
 bool Config::configInit() {
   const char *home = std::getenv("XDG_CONFIG_HOME");
-  const std::string configPath = std::string(home) + CONFIG_PATH;
-
-  // Check if the config file already exists
-  if (std::filesystem::exists(configPath)) {
-    std::cout << "Config file already exists.\n";
-    Config::parseConfig(configPath);
-    return true;
-  }
+  const std::string configDir = std::string(home) + CONFIG_DIR;
+  const std::string configPath = configDir + CONFIG_PATH;
+  const std::string cssPath = configDir + CSS_PATH;
 
   if (!home || !std::filesystem::path(home).is_absolute()) {
     std::cout << "Home could not be found" << '\n';
     return false;
   }
 
-  std::cout << "Config file does not exist" << '\n';
-  std::cout << "Creating default config..." << '\n';
-
   // Ensure the directory exists
   std::filesystem::create_directories(
       std::filesystem::path(configPath).parent_path());
 
-  // Get the conf file from the lumastart resource bundle
-  const auto source_config =
-      Gio::Resource::lookup_data_global("/lumastart/lumastart.conf");
+  // Check if the config file already exists
+  if (std::filesystem::exists(configPath)) {
+    std::cout << "Config file already exists.\n";
+    Config::parseConfig(configPath);
 
-  // Create and open the new config file
-  std::ofstream configFile(configPath, std::ios::binary | std::ios::out);
+  } else {
+    std::cout << "Config file does not exist" << '\n';
+    std::cout << "Creating default config..." << '\n';
 
-  if (!configFile) {
-    std::cerr << "Could not create new config file";
-    return false;
+    const auto source_config = Utils::getSourceFile(CONFIG_PATH);
+    Utils::writeSourceFile(source_config, configPath);
+
+    Config::parseConfig(configPath);
   }
+  std::cout << "Read Config file at " << configPath << '\n';
 
-  gsize size = 0;
-  const gconstpointer data = source_config->get_data(size);
+  // Check if the style.css file already exists
+  if (std::filesystem::exists(cssPath)) {
+    std::cout << "Css file already exists.\n";
+    Config::loadCss(cssPath);
 
-  if (data == nullptr || size == 0) {
-    std::cerr << "Failed to get the default config data" << '\n';
-    return false;
+  } else {
+    std::cout << "Style file does not exist" << '\n';
+    std::cout << "Creating default style.css..." << '\n';
+
+    const auto source_css = Utils::getSourceFile(CSS_PATH);
+    Utils::writeSourceFile(source_css, cssPath);
+
+    Config::loadCss(cssPath);
   }
+  std::cout << "Read Css file at " << cssPath << '\n';
 
-  if (!configFile.write(reinterpret_cast<const char *>(data),
-                        source_config->get_size())) {
-    std::cerr << "Failed to write default config data to new file" << '\n';
-    configFile.close();
-    return false;
-  }
-
-  configFile.close();
-
-  std::cout << "Wrote default config to " << configPath << '\n';
-
-  Config::parseConfig(configPath);
   return true;
 }
 
@@ -99,6 +88,5 @@ void Config::parseConfig(const std::string &filepath) {
       }
     }
   }
-
   config.close();
 }

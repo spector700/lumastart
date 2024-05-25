@@ -37,11 +37,7 @@
               # Add some libraries
               gtk4-layer-shell
               gtkmm4
-              # gtk4
               glibmm_2_68
-              # glib
-              # cairomm_1_16
-              # pangomm_2_48
             ];
 
             # Remove the warning

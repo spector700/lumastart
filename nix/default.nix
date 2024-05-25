@@ -7,7 +7,7 @@
   gtkmm4,
   cmake,
   gtk4-layer-shell,
-  wrapGAppsHook,
+  wrapGAppsHook4,
 }:
 stdenv.mkDerivation {
   pname = "lumastart";
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     ninja
     cmake
     # allows to get the icon from the theme on nix
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
