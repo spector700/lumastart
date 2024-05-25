@@ -13,6 +13,7 @@ void App::getCss(const std::string &file) {
   m_refCssProvider = Gtk::CssProvider::create();
 
   Gtk::StyleProvider::add_provider_for_display(
+      // GTK_STYLE_PROVIDER_PRIORITY_USER allow us to also style the window
       Gdk::Display::get_default(), m_refCssProvider,
       GTK_STYLE_PROVIDER_PRIORITY_USER);
 
@@ -21,7 +22,7 @@ void App::getCss(const std::string &file) {
         on_parsing_error(section, error);
       });
 
-  m_refCssProvider->load_from_path(file);
+  m_refCssProvider->load_from_resource(file);
 
   std::cout << "Loaded Css: " << file << '\n';
 }

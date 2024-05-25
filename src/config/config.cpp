@@ -1,7 +1,9 @@
 #include "config.h"
+#include "giomm/resource.h"
 #include <cstdlib>
 #include <filesystem>
 #include <fstream>
+#include <ios>
 #include <iostream>
 #include <string>
 
@@ -38,12 +40,36 @@ bool Config::configInit() {
   std::filesystem::create_directories(
       std::filesystem::path(configPath).parent_path());
 
-  if (std::filesystem::copy_file("res/lumastart.conf", configPath)) {
-    std::cout << "Copied default config file to " << configPath << '\n';
-  } else {
-    std::cerr << "Could not copy default file to " << configPath << '\n';
+  // Get the conf file from the lumastart resource bundle
+  const auto source_config =
+      Gio::Resource::lookup_data_global("/lumastart/lumastart.conf");
+
+  // Create and open the new config file
+  std::ofstream configFile(configPath, std::ios::binary | std::ios::out);
+
+  if (!configFile) {
+    std::cerr << "Could not create new config file";
     return false;
   }
+
+  gsize size = 0;
+  const gconstpointer data = source_config->get_data(size);
+
+  if (data == nullptr || size == 0) {
+    std::cerr << "Failed to get the default config data" << '\n';
+    return false;
+  }
+
+  if (!configFile.write(reinterpret_cast<const char *>(data),
+                        source_config->get_size())) {
+    std::cerr << "Failed to write default config data to new file" << '\n';
+    configFile.close();
+    return false;
+  }
+
+  configFile.close();
+
+  std::cout << "Wrote default config to " << configPath << '\n';
 
   Config::parseConfig(configPath);
   return true;

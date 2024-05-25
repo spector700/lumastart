@@ -10,7 +10,8 @@ int main(int argc, char *argv[]) {
   }
 
   auto app = App::create();
-  app->getCss("res/ui.css");
+  // Get the css file from the lumastart resource bundle
+  app->getCss("/lumastart/ui.css");
 
   Log::get().setLevel(Log::LevelDebug);
   Log::get().info("Lumastart is now starting...");

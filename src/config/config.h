@@ -11,7 +11,6 @@ extern Settings configSettings;
 
 namespace Config {
 bool configInit();
-
 void parseConfig(const std::string &filepath);
 
 } // namespace Config
