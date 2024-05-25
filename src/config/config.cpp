@@ -30,12 +30,6 @@ bool Config::configInit() {
   std::cout << "Config file does not exist" << '\n';
   std::cout << "Creating default config..." << '\n';
 
-  // Check if the source file exists
-  if (!std::filesystem::exists("res/lumastart.conf")) {
-    std::cerr << "Source file does not exist.\n";
-    return false;
-  }
-
   // Ensure the directory exists
   std::filesystem::create_directories(
       std::filesystem::path(configPath).parent_path());

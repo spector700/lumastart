@@ -1,5 +1,5 @@
 project('lumastart', 'cpp',
-  version : '0.1',
+  version : '0.2',
   default_options : ['buildtype=release', 'warning_level=3', 'cpp_std=c++23', 'default_library=static'])
 
 globber = run_command('sh', '-c', 'find . -name "*.cpp" | sort', check: true)
