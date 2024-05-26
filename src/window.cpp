@@ -125,7 +125,8 @@ bool LumaStart::on_keypress(guint keyval, guint, Gdk::ModifierType) {
     close();
     return true;
   }
-  if (keyval == GDK_KEY_Up) {
+  // Up arrow or shif + tab
+  if (keyval == GDK_KEY_Up || keyval == GDK_KEY_ISO_Left_Tab) {
     if (m_Selection_model->get_selected() == 0) {
       return true;
     }
@@ -135,7 +136,8 @@ bool LumaStart::on_keypress(guint keyval, guint, Gdk::ModifierType) {
     m_ListView.scroll_to(last);
     return true;
   }
-  if (keyval == GDK_KEY_Down) {
+  // Down arrow or tab
+  if (keyval == GDK_KEY_Down || keyval == GDK_KEY_Tab) {
     // Go to the top of the list if selection is at the bottom
     if (m_Selection_model->get_selected() ==
         m_FilterListModel->property_n_items() - 1) {
