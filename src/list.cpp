@@ -167,7 +167,6 @@ int LumaStart::on_model_sort(const Glib::RefPtr<const List> &a,
 }
 
 void LumaStart::add_entry(const List::properties &prop) {
-
   m_Data_model->append(
       List::create(prop.name, prop.description, prop.icon, prop.exec));
 }

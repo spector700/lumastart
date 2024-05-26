@@ -9,23 +9,27 @@
 #include "log.h"
 #include "sigc++/functors/mem_fun.h"
 #include "src/config/config.h"
+#include <iostream>
 #include <string>
 
 LumaStart::LumaStart() {
   Log::get().debug("Window Created");
 
-  // initilize the layer-shell for the window on creation
-  gtk_layer_init_for_window(this->gobj());
-  gtk_layer_set_layer(this->gobj(), GTK_LAYER_SHELL_LAYER_OVERLAY);
-  gtk_layer_set_namespace(this->gobj(), "lumastart");
+  // Create a 'C' Window object for gtk4-layer-shell
+  GtkWindow *c_windowObject = this->gobj();
 
-  gtk_layer_set_anchor(this->gobj(), GTK_LAYER_SHELL_EDGE_TOP, true);
-  gtk_layer_set_anchor(this->gobj(), GTK_LAYER_SHELL_EDGE_BOTTOM, true);
-  gtk_layer_set_anchor(this->gobj(), GTK_LAYER_SHELL_EDGE_LEFT, true);
-  gtk_layer_set_anchor(this->gobj(), GTK_LAYER_SHELL_EDGE_RIGHT, true);
+  // initilize the layer-shell for the window on creation
+  gtk_layer_init_for_window(c_windowObject);
+  gtk_layer_set_layer(c_windowObject, GTK_LAYER_SHELL_LAYER_OVERLAY);
+  gtk_layer_set_namespace(c_windowObject, "lumastart");
+
+  gtk_layer_set_anchor(c_windowObject, GTK_LAYER_SHELL_EDGE_TOP, true);
+  gtk_layer_set_anchor(c_windowObject, GTK_LAYER_SHELL_EDGE_BOTTOM, true);
+  gtk_layer_set_anchor(c_windowObject, GTK_LAYER_SHELL_EDGE_LEFT, true);
+  gtk_layer_set_anchor(c_windowObject, GTK_LAYER_SHELL_EDGE_RIGHT, true);
 
   // gets the keyboard input
-  gtk_layer_set_keyboard_mode(this->gobj(),
+  gtk_layer_set_keyboard_mode(c_windowObject,
                               GTK_LAYER_SHELL_KEYBOARD_MODE_ON_DEMAND);
 
   // event controller to get the key that is pressed
@@ -47,7 +51,8 @@ LumaStart::LumaStart() {
   m_Entry.set_key_capture_widget(*this);
   // use the window key controller to be able to exit on "esc"
   m_Entry.set_placeholder_text("Search");
-  m_Entry.signal_changed().connect(
+  m_Entry.set_search_delay(configSettings.search_delay);
+  m_Entry.signal_search_changed().connect(
       sigc::mem_fun(*this, &LumaStart::on_text_changed), false);
 
   // attach the entry Widget to the parent grid

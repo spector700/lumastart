@@ -89,6 +89,9 @@ void Config::parseConfig(const std::string &filepath) {
       if (key == "bottom_margin") {
         configSettings.bottom_margin = std::stoi(value);
       }
+      if (key == "search_delay") {
+        configSettings.search_delay = std::stoi(value);
+      }
     }
   }
   config.close();
