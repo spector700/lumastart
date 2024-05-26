@@ -1,5 +1,6 @@
 #include "window.h"
 #include "gdk/gdkkeysyms.h"
+#include "giomm/liststore.h"
 #include "glibmm/refptr.h"
 #include "glibmm/ustring.h"
 #include "gtk4-layer-shell.h"
@@ -41,15 +42,11 @@ LumaStart::LumaStart() {
   m_Grid.set_expand();
   m_Grid.set_margin_bottom(configSettings.bottom_margin);
   m_Grid.add_css_class("main");
-  m_Grid.add_controller(key_controller);
 
   // set the child of the window
   set_child(m_Grid);
 
   m_Entry.set_hexpand();
-  // always allow text entry when search bar is not focused
-  m_Entry.set_key_capture_widget(*this);
-  // use the window key controller to be able to exit on "esc"
   m_Entry.set_placeholder_text("Search");
   m_Entry.set_search_delay(configSettings.search_delay);
   m_Entry.signal_search_changed().connect(
@@ -79,6 +76,7 @@ LumaStart::LumaStart() {
       sigc::mem_fun(*this, &LumaStart::on_clicked), false);
 
   add_controller(click_controller);
+  m_Entry.add_controller(key_controller);
 
   // Set sizes from config
   m_Grid.set_size_request(configSettings.width);
@@ -90,7 +88,6 @@ LumaStart::LumaStart() {
 }
 
 void LumaStart::on_entry_activate() {
-  m_Selection_model->get_selected();
   auto item = std::dynamic_pointer_cast<Gio::ListModel>(m_ListView.get_model())
                   ->get_object(m_Selection_model->get_selected());
 
@@ -111,7 +108,9 @@ void LumaStart::on_text_changed() {
 
     m_StringFilter->set_search(text);
     m_Selection_model->set_model(m_FilterListModel);
+    // Always keep the first in view when typeing
     m_ListView.scroll_to(0);
+    // Select first item
     m_Selection_model->set_selected(0);
 
     if (!m_Revealer.get_reveal_child()) {
@@ -120,11 +119,38 @@ void LumaStart::on_text_changed() {
   }
 }
 
-// close the window, when the 'esc' key is pressed
+// keybinds for the window, esc to close and arrow navigation
 bool LumaStart::on_keypress(guint keyval, guint, Gdk::ModifierType) {
-  if (keyval == GDK_KEY_Escape || keyval == GDK_BUTTON_PRESS) {
+  if (keyval == GDK_KEY_Escape) {
     close();
     return true;
+  }
+  if (keyval == GDK_KEY_Up) {
+    if (m_Selection_model->get_selected() == 0) {
+      return true;
+    }
+    // Get the last position at move to it
+    guint last = m_Selection_model->get_selected() - 1;
+    m_Selection_model->set_selected(last);
+    m_ListView.scroll_to(last);
+    return true;
+  }
+  if (keyval == GDK_KEY_Down) {
+    // Go to the top of the list if selection is at the bottom
+    if (m_Selection_model->get_selected() ==
+        m_FilterListModel->property_n_items() - 1) {
+      m_Selection_model->set_selected(0);
+      m_ListView.scroll_to(0);
+      return true;
+    }
+
+    // Get the next position and move to it
+    guint next = m_Selection_model->get_selected() + 1;
+    if (next < m_FilterListModel->property_n_items()) {
+      m_Selection_model->set_selected(next);
+      m_ListView.scroll_to(next);
+      return true;
+    }
   }
   return false;
 }
