@@ -54,6 +54,8 @@ LumaStart::LumaStart() {
   m_Entry.set_search_delay(configSettings.search_delay);
   m_Entry.signal_search_changed().connect(
       sigc::mem_fun(*this, &LumaStart::on_text_changed), false);
+  m_Entry.signal_activate().connect(
+      sigc::mem_fun(*this, &LumaStart::on_entry_activate), false);
 
   // attach the entry Widget to the parent grid
   m_Grid.attach(m_Entry, 0, 0);
@@ -85,6 +87,18 @@ LumaStart::LumaStart() {
 
   setupDataModel();
   fillDataModel();
+}
+
+void LumaStart::on_entry_activate() {
+  m_Selection_model->get_selected();
+  auto item = std::dynamic_pointer_cast<Gio::ListModel>(m_ListView.get_model())
+                  ->get_object(m_Selection_model->get_selected());
+
+  auto row = std::dynamic_pointer_cast<List>(item);
+
+  g_spawn_command_line_async(row->m_Exec.c_str(), nullptr);
+  std::cout << "Launching: " << row->m_Name << '\n';
+  close();
 }
 
 void LumaStart::on_text_changed() {

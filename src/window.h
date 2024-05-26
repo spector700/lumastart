@@ -91,6 +91,7 @@ protected:
 
   void setupDataModel();
   void fillDataModel();
+  void on_entry_activate();
   void on_text_changed();
   bool on_keypress(guint keyval, guint keycode, Gdk::ModifierType state);
   void on_clicked(int n_press, double x, double y);

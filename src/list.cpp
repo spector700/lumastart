@@ -150,15 +150,9 @@ void LumaStart::on_item_activated(unsigned int position) {
 
   auto row = std::dynamic_pointer_cast<List>(item);
 
-  gint exit_status = g_spawn_command_line_async(row->m_Exec.c_str(), nullptr);
+  g_spawn_command_line_async(row->m_Exec.c_str(), nullptr);
+  std::cout << "Launching: " << row->m_Name << '\n';
   close();
-
-  if (exit_status == 0) {
-    std::cout << "Command executed successfully." << '\n';
-  } else {
-    std::cerr << "Command execution failed with exit status: " << exit_status
-              << '\n';
-  }
 }
 
 int LumaStart::on_model_sort(const Glib::RefPtr<const List> &a,
