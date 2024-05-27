@@ -1,7 +1,7 @@
 name: "nix-check-and-build"
 on:
   release:
-    types: [created]
+    types: [created, workflow_dispatch]
 jobs:
   tests:
     runs-on: ubuntu-latest
