@@ -1,6 +1,5 @@
 #include "window.h"
 #include "gdk/gdkkeysyms.h"
-#include "giomm/liststore.h"
 #include "glibmm/refptr.h"
 #include "glibmm/ustring.h"
 #include "gtk4-layer-shell.h"

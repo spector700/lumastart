@@ -28,13 +28,13 @@
           default = pkgs.mkShell {
             # The Nix packages provided in the environment
             packages = with pkgs; [
-              # build tools
+              # Build tools
               cmake
               pkg-config
               meson
               ninja
 
-              # Add some libraries
+              # Libraries
               gtk4-layer-shell
               gtkmm4
               glibmm_2_68

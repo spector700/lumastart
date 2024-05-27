@@ -114,10 +114,7 @@ void LumaStart::on_bind_listitem(const Glib::RefPtr<Gtk::ListItem> &list_item) {
     std::cerr << "No icon\n";
     return;
   }
-  if (m_IconTheme->has_icon(row->m_Icon)) {
-    /* m_IconTheme->lookup_icon(row->m_Icon, 0); */
-    icon->set_from_icon_name(row->m_Icon);
-  }
+  icon->set(m_IconTheme->lookup_icon(row->m_Icon, 48));
 
   auto name = dynamic_cast<Gtk::Label *>(grid->get_child_at(1, 0));
   if (!name) {
