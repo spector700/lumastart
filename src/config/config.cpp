@@ -9,7 +9,7 @@
 Settings configSettings;
 
 bool Config::configInit() {
-  const char *home = std::getenv("XDG_CONFIG_HOME");
+  const char *home = std::getenv("HOME");
   const std::string configDir = std::string(home) + CONFIG_DIR;
   const std::string configPath = configDir + CONFIG_PATH;
   const std::string cssPath = configDir + CSS_PATH;

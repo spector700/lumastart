@@ -7,9 +7,9 @@ int main(int argc, char *argv[]) {
 
   auto app = App::create();
 
-  /* if (!Config::configInit()) { */
-  /*   exit(1); */
-  /* } */
+  if (!Config::configInit()) {
+    exit(1);
+  }
 
   Log::get().setLevel(Log::LevelDebug);
   Log::get().info("Lumastart is now starting...");
