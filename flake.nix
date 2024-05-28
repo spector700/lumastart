@@ -29,7 +29,6 @@
             # The Nix packages provided in the environment
             packages = with pkgs; [
               # Build tools
-              cmake
               pkg-config
               meson
               ninja

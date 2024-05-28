@@ -99,7 +99,6 @@ void LumaStart::on_setup_listitem(
 
 void LumaStart::on_bind_listitem(const Glib::RefPtr<Gtk::ListItem> &list_item) {
   auto row = std::dynamic_pointer_cast<List>(list_item->get_item());
-
   if (!row)
     return;
 
