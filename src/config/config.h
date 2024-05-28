@@ -5,7 +5,7 @@
 #include "gtkmm/csssection.h"
 #include <string>
 
-#define CONFIG_DIR "/lumastart/"
+#define CONFIG_DIR "/.config/lumastart/"
 #define CONFIG_PATH "lumastart.conf"
 #define CSS_PATH "style.css"
 

@@ -10,14 +10,15 @@ Settings configSettings;
 
 bool Config::configInit() {
   const char *home = std::getenv("HOME");
-  const std::string configDir = std::string(home) + CONFIG_DIR;
-  const std::string configPath = configDir + CONFIG_PATH;
-  const std::string cssPath = configDir + CSS_PATH;
 
   if (!home || !std::filesystem::path(home).is_absolute()) {
     std::cout << "Home could not be found" << '\n';
     return false;
   }
+
+  const std::string configDir = std::string(home) + CONFIG_DIR;
+  const std::string configPath = configDir + CONFIG_PATH;
+  const std::string cssPath = configDir + CSS_PATH;
 
   // Ensure the directory exists
   std::filesystem::create_directories(
