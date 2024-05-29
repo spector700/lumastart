@@ -26,6 +26,16 @@
 ```bash
 lumastart
 ```
+Example of adding a keybind in hyprland to start `lumastart`.
+```nix
+wayland.windowManager.hyprland.settings = {
+  "$mod" = "SUPER";
+  bind = [
+    "$mod, Space, exec, pkill lumastart || lumastart";
+  ];
+};
+
+```
 
 # 🔨 Installation
 ### Nix
