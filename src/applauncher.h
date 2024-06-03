@@ -23,7 +23,4 @@ public:
   };
 
   static std::vector<properties> parseDesktopEntries();
-
-  static std::vector<DesktopEntry> getDesktopEntries();
-  static std::string getHomeEnv();
 };
