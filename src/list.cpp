@@ -85,12 +85,14 @@ void LumaStart::on_setup_listitem(
   name->set_halign(Gtk::Align::START);
   name->set_expand();
   name->set_margin_start(5);
+  name->add_css_class("name");
   grid->attach(*name, 1, 0);
 
   description->set_valign(Gtk::Align::CENTER);
   description->set_halign(Gtk::Align::START);
   description->set_expand();
   description->set_margin_start(5);
+  description->add_css_class("description");
   grid->attach(*description, 1, 1);
 
   grid->set_size_request(0, 60);

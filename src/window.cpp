@@ -52,6 +52,7 @@ LumaStart::LumaStart() {
       sigc::mem_fun(*this, &LumaStart::on_text_changed), false);
   m_Entry.signal_activate().connect(
       sigc::mem_fun(*this, &LumaStart::on_entry_activate), false);
+  m_Entry.add_css_class("entry");
 
   // attach the entry Widget to the parent grid
   m_Grid.attach(m_Entry, 0, 0);
@@ -81,6 +82,8 @@ LumaStart::LumaStart() {
   m_Grid.set_size_request(configSettings.width);
   m_ScrolledWindow.set_max_content_height(configSettings.height);
   m_ScrolledWindow.set_max_content_width(configSettings.width);
+  m_ScrolledWindow.add_css_class("scrolled-window");
+  m_ListView.add_css_class("list");
 
   setupDataModel();
   fillDataModel();
