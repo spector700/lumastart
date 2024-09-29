@@ -43,6 +43,24 @@ wayland.windowManager.hyprland.settings = {
 
 ```
 
+To get the blur working on Hyprland, you can add this:
+```bash
+layerrule=blur, ^(lumastart)$
+```
+<br>
+
+To have the app only have blur and not the whole screen, you can add this:
+```bash
+layerrule=ignorezero, ^(lumastart)$
+```
+<br>
+<details>
+    <summary>Example Pic of full blur</summary>
+    <img src=".github/assets/blur.png" alt="Full Blur Pic">
+</details>
+<br>
+
+
 # 🔨 Installation
 ### Nix
 ```nix
