@@ -52,7 +52,7 @@ LumaStart::LumaStart() {
       sigc::mem_fun(*this, &LumaStart::on_text_changed), false);
   m_Entry.signal_activate().connect(
       sigc::mem_fun(*this, &LumaStart::on_entry_activate), false);
-  m_Entry.add_css_class("entry");
+  m_Entry.add_css_class("searchBox");
 
   // attach the entry Widget to the parent grid
   m_Grid.attach(m_Entry, 0, 0);
