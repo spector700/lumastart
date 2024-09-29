@@ -1,13 +1,42 @@
 /* Default style.css */
 
-/* The full screen window */
+/* The full screen window and layer shell */
 window {
-  background: rgba(0, 0, 0, 0.3);
+  background: transparent;
+  font-size: 1rem;
 }
 
 /* The main visable widget */
 .main {
-  background: #272335;
+  background: rgba(50, 50, 73, 0.7);
   padding: 8px;
-  border-radius: 10px;
+  border-radius: 22px;
+}
+
+.searchBox {
+  background: rgba(50, 50, 73, 0.7);
+  border-radius: 15px;
+  outline-width: 1px;
+  outline-color: #895878;
+}
+
+.list {
+  background: transparent;
+}
+
+.list row {
+  margin: 4px;
+  border-radius: 15px;
+  background: rgba(50, 50, 73, 0.7);
+}
+
+.list row:selected {
+  background-color: #3782d2;
+  border-width: 1px;
+  border-color: #3276bf;
+  box-shadow: 0 0 6px 0 #3276bf;
+}
+
+.description {
+  opacity: 0.4;
 }
