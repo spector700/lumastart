@@ -9,6 +9,12 @@
 [Integrations](#integrations) •
 [Keybinds](#integrations)
 
+---
+
+![pic-1](.github/assets/pic-1.png)
+
+---
+
 </div>
 
 # 🎯 Features
@@ -26,7 +32,7 @@
 ```bash
 lumastart
 ```
-Example of adding a keybind in hyprland to start `lumastart`.
+Example of adding a key bind in Hyprland to start `lumastart`.
 ```nix
 wayland.windowManager.hyprland.settings = {
   "$mod" = "SUPER";
