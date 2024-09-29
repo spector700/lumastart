@@ -2,13 +2,12 @@
 
 /* The full screen window and layer shell */
 window {
-  background: transparent;
   font-size: 1rem;
 }
 
 /* The main visable widget */
 .main {
-  background: rgba(50, 50, 73, 0.7);
+  background: rgba(50, 50, 60, 0.85);
   padding: 8px;
   border-radius: 22px;
 }
@@ -20,14 +19,16 @@ window {
   outline-color: #895878;
 }
 
+/* The full list section */
 .list {
   background: transparent;
 }
 
+/* A list entry */
 .list row {
   margin: 4px;
   border-radius: 15px;
-  background: rgba(50, 50, 73, 0.7);
+  background: rgba(50, 50, 80, 0.7);
 }
 
 .list row:selected {
@@ -37,6 +38,7 @@ window {
   box-shadow: 0 0 6px 0 #3276bf;
 }
 
+/* The description text */
 .description {
   opacity: 0.4;
 }
