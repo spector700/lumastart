@@ -3,6 +3,7 @@
 /* The full screen window and layer shell */
 window {
   font-size: 1rem;
+  background: transparent;
 }
 
 /* The main visable widget */
