@@ -9,6 +9,7 @@
 #include "log.h"
 #include "sigc++/functors/mem_fun.h"
 #include "src/config/config.h"
+#include <string>
 
 LumaStart::LumaStart() {
   Log::get().debug("Window Created");
@@ -111,6 +112,12 @@ void LumaStart::on_text_changed() {
 
     m_StringFilter->set_search(text);
     m_Selection_model->set_model(m_FilterListModel);
+
+    // Hide the list if there is no items
+    if (m_Selection_model->get_n_items() == 0) {
+      m_Revealer.set_reveal_child(false);
+      return;
+    }
     // Always keep the first in view when typeing
     m_ListView.scroll_to(0);
     // Select first item
@@ -128,20 +135,22 @@ bool LumaStart::on_keypress(guint keyval, guint, Gdk::ModifierType) {
     close();
     return true;
   }
+
   // Up arrow or shift + tab
   if (keyval == GDK_KEY_Up || keyval == GDK_KEY_ISO_Left_Tab) {
     if (m_Selection_model->get_selected() == 0) {
       return true;
     }
-    // Get the last position at move to it
+    // Get the last position and move to it
     guint last = m_Selection_model->get_selected() - 1;
     m_Selection_model->set_selected(last);
     m_ListView.scroll_to(last);
     return true;
   }
+
   // Down arrow or tab
   if (keyval == GDK_KEY_Down || keyval == GDK_KEY_Tab) {
-    // Go to the top of the list if selection is at the bottom
+    // Go to the top of the list if the selection is the last in the list
     if (m_Selection_model->get_selected() ==
         m_FilterListModel->property_n_items() - 1) {
       m_Selection_model->set_selected(0);
