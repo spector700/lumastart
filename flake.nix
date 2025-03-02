@@ -6,7 +6,7 @@
 
   # Flake outputs
   outputs =
-    { self, nixpkgs }:
+    { nixpkgs, ... }:
     let
       # Systems supported
       allSystems = [

@@ -11,6 +11,7 @@
 }:
 stdenv.mkDerivation {
   pname = "lumastart";
+  applicationName = "lumastart";
   version = "0.0.3";
 
   src = builtins.path {
@@ -32,7 +33,8 @@ stdenv.mkDerivation {
   ];
 
   meta = {
-    description = "gtk system launcher";
+    mainProgram = "lumastart";
+    description = "System application launcher";
     homepage = "https://github.com/spector700/lumastart";
     license = lib.licenses.gpl3;
     # maintainers = with lib.maintainers; [ ];

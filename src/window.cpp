@@ -10,7 +10,6 @@
 #include "sigc++/functors/mem_fun.h"
 #include "src/config/config.h"
 #include <iostream>
-#include <string>
 
 LumaStart::LumaStart() {
   Log::get().debug("Window Created");
@@ -18,7 +17,7 @@ LumaStart::LumaStart() {
   // Create a 'C' Window object for gtk4-layer-shell
   GtkWindow *c_windowObject = this->gobj();
 
-  // initilize the layer-shell for the window on creation
+  // initialize the layer-shell for the window on creation
   gtk_layer_init_for_window(c_windowObject);
   gtk_layer_set_layer(c_windowObject, GTK_LAYER_SHELL_LAYER_OVERLAY);
   gtk_layer_set_namespace(c_windowObject, "lumastart");
@@ -127,7 +126,7 @@ bool LumaStart::on_keypress(guint keyval, guint, Gdk::ModifierType) {
     close();
     return true;
   }
-  // Up arrow or shif + tab
+  // Up arrow or shift + tab
   if (keyval == GDK_KEY_Up || keyval == GDK_KEY_ISO_Left_Tab) {
     if (m_Selection_model->get_selected() == 0) {
       return true;

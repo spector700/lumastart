@@ -6,7 +6,7 @@ window {
   background: transparent;
 }
 
-/* The main visable widget */
+/* The main visible widget */
 .main {
   background: rgba(50, 50, 60, 0.85);
   padding: 8px;
