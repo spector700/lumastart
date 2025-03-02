@@ -9,7 +9,6 @@
 #include "log.h"
 #include "sigc++/functors/mem_fun.h"
 #include "src/config/config.h"
-#include <iostream>
 
 LumaStart::LumaStart() {
   Log::get().debug("Window Created");
@@ -43,10 +42,12 @@ LumaStart::LumaStart() {
 
   // set the child of the window
   set_child(m_Grid);
+  m_Grid.is_focus();
 
   m_Entry.set_hexpand();
   m_Entry.set_placeholder_text("Search");
   m_Entry.set_search_delay(configSettings.search_delay);
+
   m_Entry.signal_search_changed().connect(
       sigc::mem_fun(*this, &LumaStart::on_text_changed), false);
   m_Entry.signal_activate().connect(
@@ -57,6 +58,7 @@ LumaStart::LumaStart() {
   m_Grid.attach(m_Entry, 0, 0);
 
   m_ListView.set_show_separators();
+  m_ListView.set_single_click_activate();
 
   m_ScrolledWindow.set_child(m_ListView);
   // have the scroll window match the size of the listview
@@ -95,7 +97,7 @@ void LumaStart::on_entry_activate() {
   auto row = std::dynamic_pointer_cast<List>(item);
 
   g_spawn_command_line_async(row->m_Exec.c_str(), nullptr);
-  std::cout << "Launching: " << row->m_Name << '\n';
+  Log::get().info("Launching: " + row->m_Name);
   close();
 }
 
@@ -159,8 +161,12 @@ bool LumaStart::on_keypress(guint keyval, guint, Gdk::ModifierType) {
 }
 
 // close the window when clicked outside of the main window
-void LumaStart::on_clicked(int n_press, double, double) {
-  if (n_press == 1) {
+void LumaStart::on_clicked(int n_press, double x, double y) {
+  // Get the widget at the current click coordinates
+  auto widget = pick(x, y);
+
+  // If the primary mouse button is clicked and the "widget" is the main window
+  if (n_press == 1 && widget == this) {
     close();
   }
 }

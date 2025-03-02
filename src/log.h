@@ -9,7 +9,7 @@ class Log {
 public:
   enum Level {
     LevelError = 0,
-    LevelWaring = 1,
+    LevelWarning = 1,
     LevelInfo = 2,
     LevelDebug = 3,
   };
@@ -34,14 +34,14 @@ public:
     }
   }
 
-  void info(const char *message) {
+  void info(const std::string &message) {
     if (m_LogLevel >= LevelInfo) {
       std::cout << "[INFO]: " << message << '\n';
     }
   }
 
   void warn(const char *message) {
-    if (m_LogLevel >= LevelWaring) {
+    if (m_LogLevel >= LevelWarning) {
       std::cerr << "[WARNING]: " << message << '\n';
     }
   }
