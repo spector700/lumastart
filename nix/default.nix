@@ -12,7 +12,7 @@
 stdenv.mkDerivation {
   pname = "lumastart";
   applicationName = "lumastart";
-  version = "0.0.3";
+  version = "0.1.0";
 
   src = builtins.path {
     name = "lumastart-source";
