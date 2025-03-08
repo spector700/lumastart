@@ -1,4 +1,5 @@
 #include "config.h"
+#include "../log.h"
 #include "utils/resource.h"
 #include <cstdlib>
 #include <filesystem>
@@ -80,7 +81,9 @@ void Config::parseConfig(const std::string &filepath) {
   std::ifstream config(filepath);
 
   if (!config.is_open()) {
-    std::cerr << "Could not open config file to read: " << filepath << '\n';
+    /* std::cerr << "Could not open config file to read: " << filepath << '\n';
+     */
+    Log::get().error("Could not open config file to read: " + filepath);
     exit(1);
   }
 

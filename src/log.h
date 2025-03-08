@@ -40,13 +40,13 @@ public:
     }
   }
 
-  void warn(const char *message) {
+  void warn(const std::string &message) {
     if (m_LogLevel >= LevelWarning) {
       std::cerr << "[WARNING]: " << message << '\n';
     }
   }
 
-  void error(const char *message) {
+  void error(const std::string &message) {
     if (m_LogLevel >= LevelError) {
       std::cerr << "[ERROR]: " << message << '\n';
     }
