@@ -59,6 +59,23 @@ bool Config::configInit() {
   return true;
 }
 
+std::string &ltrim(std::string &str,
+                   std::string const &whitespace = " \r\n\t\v\f") {
+  str.erase(0, str.find_first_not_of(whitespace));
+  return str;
+}
+
+std::string &rtrim(std::string &str,
+                   std::string const &whitespace = " \r\n\t\v\f") {
+  str.erase(str.find_last_not_of(whitespace) + 1);
+  return str;
+}
+
+std::string &trim(std::string &str,
+                  std::string const &whitespace = " \r\n\t\v\f") {
+  return ltrim(rtrim(str, whitespace), whitespace);
+}
+
 void Config::parseConfig(const std::string &filepath) {
   std::ifstream config(filepath);
 
@@ -75,23 +92,33 @@ void Config::parseConfig(const std::string &filepath) {
       continue;
     }
 
-    // seperate the key value at the "="
+    // separate the key value at the "="
     size_t pos = line.find('=');
     if (pos != std::string::npos) {
       std::string key = line.substr(0, pos - 1);
       std::string value = line.substr(pos + 2);
 
+      trim(key);
+      trim(value);
+
+      // Remove quotes
+      if (value.starts_with('"') && value.ends_with('"')) {
+        value = value.substr(1, value.size() - 2);
+      }
+
+      Log::get().debug("Config: " + key + " = " + value);
+
+      // convert string to int
       if (key == "width") {
         configSettings.width = std::stoi(value);
-      }
-      if (key == "height") {
+      } else if (key == "height") {
         configSettings.height = std::stoi(value);
-      }
-      if (key == "bottom_margin") {
+      } else if (key == "bottom_margin") {
         configSettings.bottom_margin = std::stoi(value);
-      }
-      if (key == "search_delay") {
+      } else if (key == "search_delay") {
         configSettings.search_delay = std::stoi(value);
+      } else if (key == "search_placeholder") {
+        configSettings.search_placeholder = value;
       }
     }
   }

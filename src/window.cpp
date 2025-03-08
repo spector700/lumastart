@@ -46,7 +46,7 @@ LumaStart::LumaStart() {
   m_Grid.is_focus();
 
   m_Entry.set_hexpand();
-  m_Entry.set_placeholder_text("Search");
+  m_Entry.set_placeholder_text(configSettings.search_placeholder);
   m_Entry.set_search_delay(configSettings.search_delay);
 
   m_Entry.signal_search_changed().connect(

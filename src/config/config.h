@@ -14,6 +14,7 @@ struct Settings {
   int height{0};
   int bottom_margin{0};
   int search_delay{0};
+  std::string search_placeholder;
 };
 
 extern Settings configSettings;
